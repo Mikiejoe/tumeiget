@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'tumeiget.wsgi.application'
+WSGI_APPLICATION = 'tumeiget.wsgi.app'
 
 
 # Database
