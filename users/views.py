@@ -22,7 +22,7 @@ def search(request,*args, **kwargs):
  
 @api_view()   
 def getstats(request):
-    collected = FoundId.objects.filter(picked=False).count()
+    collected = FoundId.objects.filter(picked=True).count()
     found = FoundId.objects.all().count()
     return Response({
         "Found": found,
