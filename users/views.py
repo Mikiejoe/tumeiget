@@ -22,8 +22,8 @@ def search(request,*args, **kwargs):
  
 @api_view()   
 def getstats(request):
-    found = FoundId.objects.filter(picked=False).count()
-    collected = FoundId.objects.count()
+    collected = FoundId.objects.filter(picked=False).count()
+    found = FoundId.objects.all().count()
     return Response({
         "Found": found,
         "collected": collected
