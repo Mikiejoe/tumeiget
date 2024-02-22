@@ -11,7 +11,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,7 +48,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'tumeiget.urls'
 CORS_ALLOWED_ORIGINS = [
-    'https://opps-frontend.vercel.app',
+    'https://2meiget.vercel.app',
     'https://b4p4f8wp-5173.uks1.devtunnels.ms',
     'http://localhost:5173',
     'http://localhost:5174'
