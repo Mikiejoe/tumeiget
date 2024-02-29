@@ -31,14 +31,17 @@ class UserManager(BaseUserManager):
 class Station(models.Model):
     name = models.CharField(max_length = 30)
 
+    def __str__(self):
+        return self.name
+
 class User(AbstractBaseUser,PermissionsMixin):
     username = models.CharField(max_length=50,unique=True,)
     email = models.CharField(max_length=30)
     is_superuser = models.BooleanField(null=True)
     is_staff = models.BooleanField(null=True)
     station = models.ForeignKey(Station,on_delete=models.CASCADE,null=True,blank=True)
-    first_name = models.CharField(max_length = 30,null=True,blank=True)
-    last_name = models.CharField(max_length = 30,null=True,blank=True)
+    firstname = models.CharField(max_length = 30,null=True,blank=True)
+    lastname = models.CharField(max_length = 30,null=True,blank=True)
     objects = UserManager()
     
     USERNAME_FIELD = "username"

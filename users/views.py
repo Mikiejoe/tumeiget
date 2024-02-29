@@ -2,16 +2,18 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from  rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
-from rest_framework.authentication import TokenAuthentication,SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated,AllowAny
-from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import permission_classes
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
+
 
 from .models import Searching,FoundId,User
 from .serializers import FoundIdSerializer,UserDetailsSerializer,SearchSerializer
 
 
-
 @api_view()
+@permission_classes([AllowAny])
 def search(request,*args, **kwargs):
     print(request.GET.get('search'))
     search = get_object_or_404(FoundId,id_no = request.query_params['search'])
@@ -19,49 +21,59 @@ def search(request,*args, **kwargs):
     return Response(serializer.data)
 
 
-@permission_classes(AllowAny)
-@authentication_classes([SessionAuthentication])
-@api_view(['GET'])   
+@api_view(['GET'])
+@csrf_exempt   
+@permission_classes([AllowAny])
 def getstats(request):
+    print(request.user)
     collected = FoundId.objects.filter(picked=True).count()
+    not_picked = FoundId.objects.filter(picked=False).count()
     found = FoundId.objects.all().count()
     return Response({
         "Found": found,
-        "collected": collected
+        "collected": collected,
+        "not_picked": not_picked
         }) 
 
 @api_view()
+@permission_classes([AllowAny])
 def get_recent(request):
-    recent = FoundId.objects.all().order_by('-date_found')[:5]
+    recent = FoundId.objects.all().order_by('-date_found').filter(station=request.user.station)[:5]
     serializer = FoundIdSerializer(recent,many=True)
+    print(serializer.data)
     return Response(serializer.data)
-
-
 
 @api_view(['POST'])
 def addid(request):
     user = request.user
     data = request.data
-    data['station'] = user.station
-    serializer = FoundIdSerializer(data = request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors)
+
+    try:
+        id = FoundId.objects.get(id_no=data['id_no'])
+        if id:
+            id.picked = False
+            return Response({"status":"success"},status=status.HTTP_201_CREATED)
+    except:
+        data['station'] = user.station.pk
+        print(data)
+        serializer = FoundIdSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors)
 
 
 class AddDetails(CreateAPIView):
     serializer_class = SearchSerializer
     queryset = Searching.objects.all()
+    permission_classes = (AllowAny,)
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 @api_view()
 def getuserdetails(request):
     user = request.user
     user_details = {
         "name": user.first_name,
-        "station": user.station
+        "station": user.station.name
     }
     
     return Response(user_details)
@@ -69,7 +81,6 @@ def getuserdetails(request):
 
 @api_view(['POST'])
 def pick(request):
-    user = request.user
     id_no = request.data['id_no']
     search = get_object_or_404(FoundId,id_no = id_no)
     search.picked = True

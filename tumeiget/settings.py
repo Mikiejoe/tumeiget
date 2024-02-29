@@ -77,6 +77,8 @@ WSGI_APPLICATION = 'tumeiget.wsgi.app'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 # postgresql://omoshjoe02:YZE8JHsDng1P@ep-blue-mud-a5i513b9.us-east-2.aws.neon.tech/tumeiget?sslmode=require
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -87,6 +89,16 @@ DATABASES = {
         'PORT': '5432',  # Default PostgreSQL port
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'tumeiget',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',
+#         'PORT': '3306',  # Default PostgreSQL port
+#     }
+# }
 
 REST_USE_JWT = True
 
@@ -113,11 +125,11 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ],
-    # 'DEFAULT_PERMISSION_CLASSES':[
-    #     'rest_framework.permissions.IsAuthenticated',
-    #     'rest_framework.permissions.AllowAny',
+    'DEFAULT_PERMISSION_CLASSES':[
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
 
-    # ],
+    ],
     'USER_DETAILS_SERIALIZER':'users.serializers.UserDetailsSerializer',
     'REST_AUTH_SERIALIZERS':'users.serializers.CustomLoginSerializer',
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
