@@ -27,13 +27,18 @@ class UserManager(BaseUserManager):
             raise ValueError("Superuser must have is_superuser=True.")
 
         return self._create_user(username, email, password,**extra_fields)
+    
+class Station(models.Model):
+    name = models.CharField(max_length = 30)
 
 class User(AbstractBaseUser,PermissionsMixin):
     username = models.CharField(max_length=50,unique=True,)
     email = models.CharField(max_length=30)
     is_superuser = models.BooleanField(null=True)
     is_staff = models.BooleanField(null=True)
-  
+    station = models.ForeignKey(Station,on_delete=models.CASCADE,null=True,blank=True)
+    first_name = models.CharField(max_length = 30,null=True,blank=True)
+    last_name = models.CharField(max_length = 30,null=True,blank=True)
     objects = UserManager()
     
     USERNAME_FIELD = "username"
@@ -43,8 +48,11 @@ class User(AbstractBaseUser,PermissionsMixin):
         return self.username
 
 
+
 class FoundId(models.Model):
     id_no = models.CharField(max_length= 10,primary_key = True)
+    date_found = models.DateTimeField(auto_now_add = True,null=True,blank=True)
+    station = models.ForeignKey(Station,on_delete=models.CASCADE,null=True,blank=True)
     picked = models.BooleanField(default = False)
     
     def __str__(self):
