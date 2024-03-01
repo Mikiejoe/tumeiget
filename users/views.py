@@ -11,6 +11,12 @@ from rest_framework import status
 from .models import Searching,FoundId,User
 from .serializers import FoundIdSerializer,UserDetailsSerializer,SearchSerializer
 
+@api_view()
+def get_ids(request):
+    station = request.user.station
+    ids= FoundId.objects.filter(station=station)
+    serializer = FoundIdSerializer(ids,many=True)
+    return Response(serializer.data)
 
 @api_view()
 @permission_classes([AllowAny])
@@ -29,6 +35,19 @@ def getstats(request):
     collected = FoundId.objects.filter(picked=True).count()
     not_picked = FoundId.objects.filter(picked=False).count()
     found = FoundId.objects.all().count()
+    return Response({
+        "Found": found,
+        "collected": collected,
+        "not_picked": not_picked
+        })
+ 
+@api_view(['GET'])
+@csrf_exempt   
+def getstats_by_station(request):
+    print(request.user)
+    collected = FoundId.objects.filter(station=request.user.station).filter(picked=True).count()
+    not_picked = FoundId.objects.filter(station=request.user.station).filter(picked=True).count()
+    found = FoundId.objects.filter(station=request.user.station).filter(picked=True).count()
     return Response({
         "Found": found,
         "collected": collected,
