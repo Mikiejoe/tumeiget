@@ -47,12 +47,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'tumeiget.urls'
-CORS_ALLOWED_ORIGINS = [
-    'https://2meiget.vercel.app',
-    'https://b4p4f8wp-5173.uks1.devtunnels.ms',
-    'http://localhost:5173',
-    'http://localhost:5174'
-]
+CORS_ALLOW_ALL_ORIGINS= True
+# CORS_ALLOWED_ORIGINS = [
+#     'https://2meiget.vercel.app',
+#     'https://b4p4f8wp-5173.uks1.devtunnels.ms',
+#     'http://localhost:5173',
+#     'http://localhost:5174'
+# ]
 SITE_ID = 1
 
 TEMPLATES = [
