@@ -1,15 +1,15 @@
-from rest_framework.decorators import api_view
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
-from  rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status
-
 
 from .models import Searching,FoundId,User
 from .serializers import FoundIdSerializer,UserDetailsSerializer,SearchSerializer
+
 
 @api_view()
 def get_ids(request):
@@ -17,6 +17,7 @@ def get_ids(request):
     ids= FoundId.objects.filter(station=station)
     serializer = FoundIdSerializer(ids,many=True)
     return Response(serializer.data)
+
 
 @api_view()
 @permission_classes([AllowAny])
@@ -27,8 +28,8 @@ def search(request,*args, **kwargs):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
 @csrf_exempt   
+@api_view(['GET'])
 @permission_classes([AllowAny])
 def getstats(request):
     print(request.user)
@@ -41,8 +42,9 @@ def getstats(request):
         "not_picked": not_picked
         })
  
-@api_view(['GET'])
+
 @csrf_exempt   
+@api_view(['GET'])
 def getstats_by_station(request):
     print(request.user)
     collected = FoundId.objects.filter(station=request.user.station).filter(picked=True).count()
@@ -54,6 +56,7 @@ def getstats_by_station(request):
         "not_picked": not_picked
         }) 
 
+
 @api_view()
 @permission_classes([AllowAny])
 def get_recent(request):
@@ -62,11 +65,13 @@ def get_recent(request):
     print(serializer.data)
     return Response(serializer.data)
 
+
+@csrf_exempt
 @api_view(['POST'])
 def addid(request):
     user = request.user
     data = request.data
-
+    print(data)
     try:
         id = FoundId.objects.get(id_no=data['id_no'])
         if id:
@@ -87,6 +92,8 @@ class AddDetails(CreateAPIView):
     queryset = Searching.objects.all()
     permission_classes = (AllowAny,)
 
+
+@csrf_exempt
 @api_view()
 def getuserdetails(request):
     user = request.user
@@ -94,10 +101,10 @@ def getuserdetails(request):
         "name": user.first_name,
         "station": user.station.name
     }
-    
     return Response(user_details)
 
 
+@csrf_exempt
 @api_view(['POST'])
 def pick(request):
     id_no = request.data['id_no']
