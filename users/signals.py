@@ -14,7 +14,7 @@ def send_email_and_text(sender,**kwargs):
             search = Searching.objects.get(id_no=kwargs['instance'].id_no)
             print("sending message and email to :",search.email,search.phone)
             send(search.email)
-            send_sms(search.phone)
+            # send_sms(search.phone)
             
         except Searching.DoesNotExist:
             pass
