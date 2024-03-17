@@ -76,6 +76,7 @@ def addid(request):
         id = FoundId.objects.get(id_no=data['id_no'])
         if id:
             id.picked = False
+            print(id.picked)
             return Response({"status":"success"},status=status.HTTP_201_CREATED)
     except:
         data['station'] = user.station.pk
@@ -83,6 +84,7 @@ def addid(request):
         serializer = FoundIdSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
+            print(serializer.data)
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors)
 
