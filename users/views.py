@@ -77,7 +77,7 @@ def addid(request):
         if id:
             id.picked = False
             id.station = user.station.id
-            print(id.picked)
+            print(id.station.name)
             id.save()
             return Response({"status":id.picked},status=status.HTTP_201_CREATED)
     except:
