@@ -11,10 +11,3 @@ def send_sms(phone):
     response = sms.send("Your ID has been fooud please come pick it up as soon as possible..", [phone], '2meiget')
     print(response)
 
-# # Or use it asynchronously
-# def on_finish(error, response):
-#     if error is not None:
-#         raise error
-#     print(response)
-
-# sms.send("Hello Message!", ["+2547xxxxxx"], callback=on_finish)

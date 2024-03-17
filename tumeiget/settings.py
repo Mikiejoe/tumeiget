@@ -4,15 +4,18 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 SECRET_KEY = 'django-insecure-kgla@83avavqjp81@j5cnmz)ck^jw70)xf_-c!!*mdb*@9d+4c'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = ["*"]
 
-# Application definition
 
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -20,14 +23,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'corsheaders',
+    
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    
     'drf_yasg',
     'rest_framework_swagger',
+    
     'dj_rest_auth',
     'dj_rest_auth.registration',
+    
     'rest_framework',
     'rest_framework.authtoken',
 
@@ -126,7 +134,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES':[
         'rest_framework.permissions.IsAuthenticated',
-                ],
+    ],
     'USER_DETAILS_SERIALIZER':'users.serializers.UserDetailsSerializer',
     'REST_AUTH_SERIALIZERS':'users.serializers.CustomLoginSerializer',
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
@@ -135,7 +143,6 @@ REST_FRAMEWORK = {
 REST_AUTH_SERIALIZERS = {
     "LOGIN_SERIALIZER": 'users.serializers.CustomLoginSerializer'
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -159,6 +166,7 @@ STATIC_ROOT = os.path.join(BASE_DIR,'static')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 AUTH_USER_MODEL = 'users.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
