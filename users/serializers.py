@@ -53,6 +53,7 @@ class UserDetailsSerializer(serializers.ModelSerializer):
         
 class FoundIdSerializer(serializers.ModelSerializer):
     class Meta:
+        depth = 1
         model = FoundId
         fields = '__all__'
         
