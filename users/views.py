@@ -72,7 +72,7 @@ def get_recent(request):
 @api_view(['POST'])
 def addid(request):
     user = request.user
-    station = request.user.station.id
+    station = request.user.station
     data = request.data
     try:
         id = FoundId.objects.get(id_no=data['id_no'])
@@ -83,7 +83,7 @@ def addid(request):
             id.save()
             id_serializer = FoundIdSerializer(id)
             return Response(id_serializer.data,status=status.HTTP_201_CREATED)
-    except:
+    except FoundId.DoesNotExist:
 
         data['station'] = station
         print(data)
