@@ -76,13 +76,17 @@ def addid(request):
         id = FoundId.objects.get(id_no=data['id_no'])
         if id:
             id.picked = False
-            return Response({"status":"success"},status=status.HTTP_201_CREATED)
+            id.station = user.station.id
+            print(id.station.name)
+            id.save()
+            return Response({"status":id.picked},status=status.HTTP_201_CREATED)
     except:
-        data['station'] = user.station.pk
+        data['station'] = user.station.id
         print(data)
         serializer = FoundIdSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
+            print(serializer.data)
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors)
 
@@ -112,6 +116,3 @@ def pick(request):
     search.picked = True
     search.save()
     return Response({"success":"success"})
-
-
-    
