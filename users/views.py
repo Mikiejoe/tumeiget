@@ -112,3 +112,6 @@ def pick(request):
     search.picked = True
     search.save()
     return Response({"success":"success"})
+
+
+    
