@@ -2,10 +2,10 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 
-def send(email):
+def send(email,name,station):
     response = send_mail(
         subject="2meiget",
-        message="Your ID has been fooud please come pick it up as soon as possible..",
+        message=f"Hey {name} your ID card has been found at {station}.\n Pick it up as soon as possible..",
         recipient_list=[email],
         from_email=settings.EMAIL_HOST_USER
     )
