@@ -34,7 +34,7 @@ def search(request,*args, **kwargs):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getstats(request):
-    print(request.user.station)
+    # print(request.user.station)
     collected = FoundId.objects.filter(picked=True).count()
     not_picked = FoundId.objects.filter(picked=False).count()
     found = FoundId.objects.all().count()
