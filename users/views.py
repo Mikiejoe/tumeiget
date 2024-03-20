@@ -1,5 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+
+
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -7,7 +9,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 
-from .models import Searching,FoundId,User
+from .models import Searching,FoundId,User,Station
 from .serializers import FoundIdSerializer,UserDetailsSerializer,SearchSerializer
 
 
@@ -32,7 +34,7 @@ def search(request,*args, **kwargs):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def getstats(request):
-    print(request.user)
+    print(request.user.station)
     collected = FoundId.objects.filter(picked=True).count()
     not_picked = FoundId.objects.filter(picked=False).count()
     found = FoundId.objects.all().count()
@@ -70,26 +72,30 @@ def get_recent(request):
 @api_view(['POST'])
 def addid(request):
     user = request.user
+    station = request.user.station.id
     data = request.data
-    print(data)
     try:
         id = FoundId.objects.get(id_no=data['id_no'])
         if id:
             id.picked = False
-            id.station = user.station.id
+            id.station = user.station
             print(id.station.name)
             id.save()
-            return Response({"status":id.picked},status=status.HTTP_201_CREATED)
+            id_serializer = FoundIdSerializer(id)
+            return Response(id_serializer.data,status=status.HTTP_201_CREATED)
     except:
-        data['station'] = user.station.id
+
+        data['station'] = station
         print(data)
         serializer = FoundIdSerializer(data = request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(station=station)
             print(serializer.data)
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors)
-
+#  {
+# "id_no":"9876543"
+# }
 
 class AddDetails(CreateAPIView):
     serializer_class = SearchSerializer
