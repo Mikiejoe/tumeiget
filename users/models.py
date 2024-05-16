@@ -54,7 +54,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 
 class FoundId(models.Model):
     id_no = models.CharField(max_length= 10,primary_key = True)
-    date_found = models.DateTimeField(auto_now_add = True,null=True,blank=True)
+    date_found = models.DateTimeField(auto_now = True,null=True,blank=True)
     station = models.ForeignKey(Station,on_delete=models.CASCADE,null=True,blank=True)
     picked = models.BooleanField(default = False)
     
