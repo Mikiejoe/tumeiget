@@ -19,3 +19,5 @@ def send_email_and_text(sender,**kwargs):
             
         except Searching.DoesNotExist:
             pass
+    else:
+        send(search.email,search.name,kwargs['instance'].station.name)
