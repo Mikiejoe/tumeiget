@@ -8,7 +8,8 @@ urlpatterns = [
     path('ids/',views.get_ids,name='ids'),
     path('add/',views.addid,name='add'),
     path('add-details/',views.AddDetails.as_view(),name='add-details'),
-    path('user-details/',views.getuserdetails,name='user-details'),
+    # path('user-details/',views.getuserdetails,name='user-details'),
     path('pick/',views.pick,name='pick'),
+    path("add-details/",views.add_details,name="add-testing"),
     path('recent/',views.get_recent,name="recent"),
 ]

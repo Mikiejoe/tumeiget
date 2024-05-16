@@ -97,7 +97,22 @@ class AddDetails(CreateAPIView):
     serializer_class = SearchSerializer
     queryset = Searching.objects.all()
     permission_classes = (AllowAny,)
+    
 
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def add_details(request):
+    data = request.data.copy()
+    # mutable_data = request.data.copy()
+    phone = data['phone']
+    data['phone'] = "+"+phone
+    print(data)
+    serializer = SearchSerializer(data = data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data,status=status.HTTP_201_CREATED)
+    return Response(serializer.errors)
 
 @csrf_exempt
 @api_view()

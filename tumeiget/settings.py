@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     
-    'drf_yasg',
+    # 'drf_yasg',
     'rest_framework_swagger',
     
     'dj_rest_auth',
