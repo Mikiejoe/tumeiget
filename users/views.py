@@ -24,7 +24,6 @@ def get_ids(request):
 @api_view()
 @permission_classes([AllowAny])
 def search(request,*args, **kwargs):
-    print(request.GET.get('search'))
     search = get_object_or_404(FoundId,id_no = request.query_params['search'])
     serializer = FoundIdSerializer(search)
     return Response(serializer.data)
@@ -48,7 +47,6 @@ def getstats(request):
 @csrf_exempt   
 @api_view(['GET'])
 def getstats_by_station(request):
-    print(request.user)
     collected = FoundId.objects.filter(station=request.user.station).filter(picked=True).count()
     not_picked = FoundId.objects.filter(station=request.user.station).filter(picked=True).count()
     found = FoundId.objects.filter(station=request.user.station).filter(picked=True).count()
@@ -64,7 +62,6 @@ def getstats_by_station(request):
 def get_recent(request):
     recent = FoundId.objects.all().order_by('-date_found').filter(station=request.user.station)[:5]
     serializer = FoundIdSerializer(recent,many=True)
-    print(serializer.data)
     return Response(serializer.data)
 
 
@@ -86,7 +83,6 @@ def addid(request):
     except FoundId.DoesNotExist:
 
         data['station'] = station
-        print(data)
         serializer = FoundIdSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save(station=station)
