@@ -93,10 +93,10 @@ def addid(request):
 # "id_no":"9876543"
 # }
 
-class AddDetails(CreateAPIView):
-    serializer_class = SearchSerializer
-    queryset = Searching.objects.all()
-    permission_classes = (AllowAny,)
+# class AddDetails(CreateAPIView):
+#     serializer_class = SearchSerializer
+#     queryset = Searching.objects.all()
+#     permission_classes = (AllowAny,)
     
 
 @csrf_exempt
@@ -104,9 +104,10 @@ class AddDetails(CreateAPIView):
 @permission_classes([AllowAny])
 def add_details(request):
     data = request.data.copy()
+    print("data")
     # mutable_data = request.data.copy()
     phone = data['phone']
-    data['phone'] = "+"+phone
+    data['phone'] = "+"+data['phone']
     print(data)
     serializer = SearchSerializer(data = data)
     if serializer.is_valid():

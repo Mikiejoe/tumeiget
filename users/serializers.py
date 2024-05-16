@@ -61,3 +61,4 @@ class SearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Searching
         fields = '__all__'
+    
