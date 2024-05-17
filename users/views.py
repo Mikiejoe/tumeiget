@@ -12,6 +12,24 @@ from rest_framework.decorators import permission_classes
 from .models import Searching,FoundId,User,Station
 from .serializers import FoundIdSerializer,UserDetailsSerializer,SearchSerializer
 
+import re
+
+def format_kenyan_phone_number(number):
+    # Regular expression to match numbers starting with 07
+    pattern_07 = re.compile(r'^07\d{8}$')
+    # Regular expression to match numbers starting with 254
+    pattern_254 = re.compile(r'^254\d{9}$')
+    
+    if pattern_07.match(number):
+        # Replace the leading 0 with +254
+        formatted_number = '+254' + number[1:]
+        return formatted_number
+    elif pattern_254.match(number):
+        # Prepend + to the number
+        formatted_number = '+' + number
+        return formatted_number
+    return False
+
 
 @api_view()
 def get_ids(request):
@@ -107,8 +125,11 @@ def add_details(request):
     print("data")
     # mutable_data = request.data.copy()
     phone = data['phone']
-    data['phone'] = "+"+data['phone']
+    data['phone'] = format_kenyan_phone_number(phone)
     print(data)
+    if not data['phone']:
+        return Response({"error":"Invalid phone number"})
+    # return Response(data)
     serializer = SearchSerializer(data = data)
     if serializer.is_valid():
         serializer.save()
